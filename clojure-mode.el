@@ -459,7 +459,7 @@ ENDP and DELIM."
               (t)))))
 
 (defconst clojure--collection-tag-regexp "#\\(::[a-zA-Z0-9._-]*\\|:?\\([a-zA-Z0-9._-]+/\\)?[a-zA-Z0-9._-]+\\)"
-    "Allowed strings that can come before a collection literal (e.g. '[]' or '{}'), as reader macro tags.
+  "Allowed strings that can come before a collection literal (e.g. '[]' or '{}'), as reader macro tags.
 This includes #fully.qualified/my-ns[:kw val] and #::my-ns{:kw val} as of Clojure 1.9.")
 
 (defun clojure-no-space-after-tag (endp delimiter)
@@ -762,6 +762,88 @@ definition of 'macros': URL `http://git.io/vRGLD'.")
 Matches the rule `clojure--sym-forbidden-1st-chars' followed by
 any number of matches of `clojure--sym-forbidden-rest-chars'."))
 
+;; (->> (ns-publics (the-ns 'clojure.core)) (map last) (map meta) (filter :macro) (map :name) (map str) sort pprint/pprint)
+(setq vemv/all-clojure-macros
+      '("->"
+        "->>"
+        ".."
+        "amap"
+        "and"
+        "areduce"
+        "as->"
+        "assert"
+        "binding"
+        "bound-fn"
+        "case"
+        "comment"
+        "cond"
+        "cond->"
+        "cond->>"
+        "condp"
+        "declare"
+        "definline"
+        "definterface"
+        "defmacro"
+        "defmethod"
+        "defmulti"
+        "defn"
+        "defn-"
+        "defonce"
+        "defprotocol"
+        "defrecord"
+        "defstruct"
+        "deftype"
+        "delay"
+        "doseq"
+        "dosync"
+        "dotimes"
+        "doto"
+        "extend-protocol"
+        "extend-type"
+        "fn"
+        "for"
+        "future"
+        "gen-class"
+        "gen-interface"
+        "if-let"
+        "if-not"
+        "if-some"
+        "import"
+        "io!"
+        "lazy-cat"
+        "lazy-seq"
+        "let"
+        "letfn"
+        "locking"
+        "loop"
+        "memfn"
+        "ns"
+        "or"
+        "proxy"
+        "proxy-super"
+        "pvalues"
+        "refer-clojure"
+        "reify"
+        "some->"
+        "some->>"
+        "sync"
+        "time"
+        "vswap!"
+        "when"
+        "when-first"
+        "when-let"
+        "when-not"
+        "when-some"
+        "while"
+        "with-bindings"
+        "with-in-str"
+        "with-loading-context"
+        "with-local-vars"
+        "with-open"
+        "with-out-str"
+        "with-precision"
+        "with-redefs"))
+
 (defconst clojure-font-lock-keywords
   (eval-when-compile
     `( ;; Top-level variable definition
@@ -825,16 +907,7 @@ any number of matches of `clojure--sym-forbidden-rest-chars'."))
       ;; Built-in binding and flow of control forms
       (,(concat
          "(\\(?:clojure.core/\\)?"
-         (regexp-opt
-          '("letfn" "case" "cond" "cond->" "cond->>" "condp"
-            "for" "when" "when-not" "when-let" "when-first" "when-some"
-            "if-let" "if-not" "if-some"
-            ".." "->" "->>" "as->" "doto" "and" "or"
-            "dosync" "doseq" "dotimes" "dorun" "doall"
-            "ns" "in-ns"
-            "with-open" "with-local-vars" "binding"
-            "with-redefs" "with-redefs-fn"
-            "declare") t)
+         (regexp-opt vemv/all-clojure-macros t)
          "\\>")
        1 font-lock-keyword-face)
       ;; Macros similar to let, when, and while
