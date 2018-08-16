@@ -1306,7 +1306,7 @@ When called from lisp code align everything between BEG and END."
           (align-region (point) sexp-end nil
                         '((clojure-align (regexp . clojure--search-whitespace-after-next-sexp)
                                          (group . 1)
-                                         (separate . "^ *$")
+                                         (separate . entire)
                                          (repeat . t)))
                         nil))
         ;; Reindent after aligning because of #360.
