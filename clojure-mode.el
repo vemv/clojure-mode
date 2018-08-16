@@ -1208,6 +1208,14 @@ construct."
   ;; Are we in a map?
   (or (and (eq (char-before) ?{)
            (not (eq (char-before (1- (point))) ?\#)))
+      ;; Are we in a reader conditional?
+      (or (and (eq (char-before) ?\()
+               (eq (char-before (- (point) 1)) ??)
+               (eq (char-before (- (point) 2)) ?\#))
+          (and (eq (char-before) ?\()
+               (eq (char-before (- (point) 1)) ?@)
+               (eq (char-before (- (point) 2)) ??)
+               (eq (char-before (- (point) 3)) ?\#)))
       ;; Are we in a cond form?
       (let* ((fun    (car (member (thing-at-point 'symbol) clojure-align-cond-forms)))
              (method (and fun (clojure--get-indent-method fun)))
@@ -1239,10 +1247,10 @@ Place point as in `clojure--position-for-alignment'."
   (let ((found))
     (while (and (not found)
                 (search-forward-regexp
-                 (concat "{\\|(" (regexp-opt
-                                  (append clojure-align-binding-forms
-                                          clojure-align-cond-forms)
-                                  'symbols))
+                 (concat "#\\?@(\\|#\\?(\\|{\\|(" (regexp-opt
+                                                   (append clojure-align-binding-forms
+                                                           clojure-align-cond-forms)
+                                                   'symbols))
                  end 'noerror))
 
       (let ((ppss (syntax-ppss)))
