@@ -895,6 +895,8 @@ any number of matches of `clojure--sym-forbidden-rest-chars'."))
        (2 font-lock-function-name-face nil t))
       ;; lambda arguments - %, %&, %1, %2, etc
       ("\\<%[&1-9]?" (0 'clojure-lambda-arg-face))
+      ;; type metadata
+      ("\\^\\sw+" (0 'clojure-type-metadata-face))
       ;; Special forms
       (,(concat
          "("
