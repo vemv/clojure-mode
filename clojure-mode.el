@@ -847,7 +847,11 @@ any number of matches of `clojure--sym-forbidden-rest-chars'."))
 
 (defconst clojure-font-lock-keywords
   (eval-when-compile
-    `( ;; Top-level variable definition
+    `((","
+       (0 'parenthesis))
+      ("@"
+       (0 'parenthesis))
+      ;; Top-level variable definition
       (,(concat "(\\(?:clojure.core/\\)?\\("
                 (regexp-opt '("def" "defonce" "ns"))
                 ;; variable declarations
