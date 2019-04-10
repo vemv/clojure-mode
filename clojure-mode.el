@@ -895,8 +895,6 @@ any number of matches of `clojure--sym-forbidden-rest-chars'."))
        (2 font-lock-function-name-face nil t))
       ;; lambda arguments - %, %&, %1, %2, etc
       ("\\<%[&1-9]?" (0 'clojure-lambda-arg-face))
-      ;; type metadata
-      ("\\^\\sw+" (0 'clojure-type-metadata-face))
       ;; Special forms
       (,(concat
          "("
@@ -955,6 +953,23 @@ any number of matches of `clojure--sym-forbidden-rest-chars'."))
                 ;; namespace
                 "\\(" clojure--sym-regexp "\\)")
        (1 font-lock-type-face))
+
+      ;; type metadata (except for keywords)
+      ("\\^\\sw+" (0 'clojure-type-metadata-face))
+
+      ;; type metadata for keywords. copies the original keywords code, but adding \\^
+      ;; must be placed above the original keywords code.
+      (,(concat "\\^\\(:\\{1,2\\}\\)\\(" clojure--sym-regexp "?\\)\\(/\\)\\(" clojure--sym-regexp "\\)")
+       (1 'clojure-type-metadata-face)
+       (2 'clojure-type-metadata-face)
+       (3 'default)
+       (4 'clojure-type-metadata-face))
+
+      ;; type metadata for keywords. copies the original keywords code, but adding \\^
+      ;; must be placed above the original keywords code.
+      (,(concat "\\^\\(:\\{1,2\\}\\)\\(" clojure--sym-regexp "\\)")
+       (1 'clojure-type-metadata-face)
+       (2 'clojure-type-metadata-face))
 
       ;; TODO dedupe the code for matching of keywords, type-hints and unmatched symbols
 
